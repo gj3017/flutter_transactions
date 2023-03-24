@@ -7,9 +7,11 @@ import '../models/transaction.dart';
 class Chart extends StatelessWidget {
   final List<Transaction> recentTransactions;
 
-  Chart(this.recentTransactions);
+  Chart(this.recentTransactions) {
+    print('Constructor Chart');
+  }
 
-  List<Map<String, Object>> get groupedTransactionValues {
+  List<Map<String, dynamic>> get groupedTransactionValues {
     return List.generate(7, (index) {
       final weekDay = DateTime.now().subtract(
         Duration(days: index),
@@ -33,12 +35,13 @@ class Chart extends StatelessWidget {
 
   double get totalSpending {
     return groupedTransactionValues.fold(0.0, (sum, item) {
-      return sum + double.parse(item['amount'].toString());
+      return sum + item['amount'];
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    print('build() Chart');
     return Card(
       elevation: 6,
       margin: EdgeInsets.all(20),
@@ -50,8 +53,8 @@ class Chart extends StatelessWidget {
             return Flexible(
               fit: FlexFit.tight,
               child: ChartBar(
-                data['day'].toString(),
-                double.parse(data['amount'].toString()),
+                data['day'],
+                data['amount'],
                 totalSpending == 0.0
                     ? 0.0
                     : (data['amount'] as double) / totalSpending,
